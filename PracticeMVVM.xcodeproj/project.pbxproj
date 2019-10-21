@@ -133,7 +133,6 @@
 				FE52B39F2359998700EDD4AB /* View */,
 				FE52B36F235997EA00EDD4AB /* AppDelegate.swift */,
 				FE52B371235997EA00EDD4AB /* SceneDelegate.swift */,
-				FE52B373235997EA00EDD4AB /* ViewController.swift */,
 				FE52B375235997EA00EDD4AB /* Main.storyboard */,
 				FE52B378235997F100EDD4AB /* Assets.xcassets */,
 				FE52B37A235997F100EDD4AB /* LaunchScreen.storyboard */,
@@ -171,6 +170,7 @@
 		FE52B3A223599A2E00EDD4AB /* Model */ = {
 			isa = PBXGroup;
 			children = (
+				FE52B3BE23599D7200EDD4AB /* MusicHandler.swift */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -178,6 +178,7 @@
 		FE52B3A323599A3600EDD4AB /* Controller */ = {
 			isa = PBXGroup;
 			children = (
+				FE52B373235997EA00EDD4AB /* ViewController.swift */,
 			);
 			path = Controller;
 			sourceTree = "<group>";
@@ -186,7 +187,6 @@
 			isa = PBXGroup;
 			children = (
 				FE52B3C22359A19000EDD4AB /* Extension+UIViewController.swift */,
-				FE52B3BE23599D7200EDD4AB /* MusicHandler.swift */,
 				FE52B3BC23599D5D00EDD4AB /* DownloadMusic.swift */,
 				FE52B3A723599D4D00EDD4AB /* Request */,
 			);
