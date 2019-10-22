@@ -31,6 +31,7 @@
 		FEF634642359BC38005734E2 /* ListCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = FEF634632359BC38005734E2 /* ListCell.swift */; };
 		FEF63467235DA84E005734E2 /* ViewControllerViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = FEF63466235DA84E005734E2 /* ViewControllerViewModel.swift */; };
 		FEF63469235EA273005734E2 /* ListCellViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = FEF63468235EA273005734E2 /* ListCellViewModel.swift */; };
+		FEF6346B235EDD0C005734E2 /* ObservableCore.swift in Sources */ = {isa = PBXBuildFile; fileRef = FEF6346A235EDD0C005734E2 /* ObservableCore.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -81,6 +82,7 @@
 		FEF634632359BC38005734E2 /* ListCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ListCell.swift; sourceTree = "<group>"; };
 		FEF63466235DA84E005734E2 /* ViewControllerViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewControllerViewModel.swift; sourceTree = "<group>"; };
 		FEF63468235EA273005734E2 /* ListCellViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ListCellViewModel.swift; sourceTree = "<group>"; };
+		FEF6346A235EDD0C005734E2 /* ObservableCore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ObservableCore.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -191,6 +193,7 @@
 		FE52B3A423599A4A00EDD4AB /* Tools */ = {
 			isa = PBXGroup;
 			children = (
+				FEF6346A235EDD0C005734E2 /* ObservableCore.swift */,
 				FE52B3C22359A19000EDD4AB /* Extension+UIViewController.swift */,
 				FE52B3BC23599D5D00EDD4AB /* DownloadMusic.swift */,
 				FE52B3A723599D4D00EDD4AB /* Request */,
@@ -384,6 +387,7 @@
 				FE52B3B623599D4E00EDD4AB /* CommunicatorEnums.swift in Sources */,
 				FE52B3BA23599D4E00EDD4AB /* DownloadProtocol.swift in Sources */,
 				FEF634642359BC38005734E2 /* ListCell.swift in Sources */,
+				FEF6346B235EDD0C005734E2 /* ObservableCore.swift in Sources */,
 				FE52B3BD23599D5D00EDD4AB /* DownloadMusic.swift in Sources */,
 				FE52B3C123599E2A00EDD4AB /* ConvertableProtocol.swift in Sources */,
 				FEF63469235EA273005734E2 /* ListCellViewModel.swift in Sources */,
