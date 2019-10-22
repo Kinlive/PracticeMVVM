@@ -15,21 +15,32 @@ class ListCell: UITableViewCell {
     @IBOutlet weak var titleLabel: UILabel!
     @IBOutlet weak var descriptionLabel: UILabel!
     
+    private var viewModel: ListCellViewModel?
+    
     override func awakeFromNib() {
         super.awakeFromNib()
         // Initialization code
     }
-
-    override func setSelected(_ selected: Bool, animated: Bool) {
-        super.setSelected(selected, animated: animated)
-
-        // Configure the view for the selected state
-    }
-
+    
     override func prepareForReuse() {
         super.prepareForReuse()
         albumImageView.image = nil
+        self.viewModel?.onImageDownloaded = nil
         
+    }
+    
+    func setup(viewModel: ListCellViewModel) {
+        self.viewModel = viewModel
+        
+        self.titleLabel.text = viewModel.title
+        self.descriptionLabel.text = viewModel.description
+        
+        self.viewModel?.onImageDownloaded = { [weak self] image in
+            DispatchQueue.main.async {
+                self?.albumImageView.image = image
+            }
+        }
+        self.viewModel?.getImage()
     }
 
 }
