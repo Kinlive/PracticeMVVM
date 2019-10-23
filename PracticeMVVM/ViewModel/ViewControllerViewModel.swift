@@ -72,9 +72,7 @@ class ViewControllerViewModel {
     
     private func convertMusicToViewModel(musics: [MusicHandler]) {
         for music in musics {
-            let listCellViewModel = ListCellViewModel(title: music.collectionName,
-                                                description: music.name,
-                                                   imageUrl: music.imageUrl)
+            let listCellViewModel = ListCellViewModel(music, observerFail: events?.onRequestFail)
             
             outputs?.listCellViewModels.append(listCellViewModel)
         }

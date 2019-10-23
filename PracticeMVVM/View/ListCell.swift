@@ -25,22 +25,31 @@ class ListCell: UITableViewCell {
     override func prepareForReuse() {
         super.prepareForReuse()
         albumImageView.image = nil
-        self.viewModel?.onImageDownloaded = nil
+        viewModel?.clearOnReuse()
         
     }
     
     func setup(viewModel: ListCellViewModel) {
         self.viewModel = viewModel
         
-        self.titleLabel.text = viewModel.title
-        self.descriptionLabel.text = viewModel.description
-        
-        self.viewModel?.onImageDownloaded = { [weak self] image in
+        viewModel.events.onTitleChanged.binding { [weak self] value in
             DispatchQueue.main.async {
-                self?.albumImageView.image = image
+                self?.titleLabel.text = value
             }
         }
-        self.viewModel?.getImage()
+        
+        viewModel.events.onDescriptionChanged.binding { [weak self] value in
+            DispatchQueue.main.async {
+                 self?.descriptionLabel.text = value
+            }
+        }
+        
+        viewModel.events.onImageDownloaded.binding { [weak self] value in
+            DispatchQueue.main.async {
+                self?.albumImageView.image = value
+            }
+        }
+       
     }
 
 }

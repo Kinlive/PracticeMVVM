@@ -63,8 +63,8 @@ extension ViewController: UITableViewDelegate, UITableViewDataSource {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         guard let listCellViewModel = viewModel.outputs?.listCellViewModels[indexPath.row] else { return }
         
-        convienceAlert(alert: "Tapped: \(listCellViewModel.title)",
-                alertMessage: "music: \(listCellViewModel.description)",
+        convienceAlert(alert: "Tapped: \(listCellViewModel.events.onTitleChanged.value ?? "")",
+            alertMessage: "music: \(listCellViewModel.events.onDescriptionChanged.value ?? "")",
                      actions: ["確認"],
                   completion: nil, actionCompletion: nil)
     }
