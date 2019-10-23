@@ -13,14 +13,17 @@ class ViewController: UIViewController {
     @IBOutlet weak var searchBar: UISearchBar!
     @IBOutlet weak var listTableView: UITableView!
     
-    let viewModel = ViewControllerViewModel()
+    lazy var viewModel: ViewControllerViewModel = {
+        return ViewControllerViewModel(delegate: self)
+    }()
+    
+    var searchTextChanged: Observable<String> = Observable()
     
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view.
         
         initView()
-        bindViewModel()
     }
     
     func initView() {
@@ -30,21 +33,12 @@ class ViewController: UIViewController {
         listTableView.separatorStyle = .none
         
     }
-    
-    func bindViewModel() {
-        viewModel.onRequestEnd = { [weak self] in
-            DispatchQueue.main.async {
-                self?.listTableView.reloadData()
-            }
-        }
-        
-    }
 
 }
 
 extension ViewController: UISearchBarDelegate {
     func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
-        viewModel.searchText = searchBar.text ?? ""
+        searchTextChanged.onNext(searchBar.text)
         searchBar.endEditing(true)
     }
 }
@@ -52,21 +46,22 @@ extension ViewController: UISearchBarDelegate {
 extension ViewController: UITableViewDelegate, UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return viewModel.listCellViewModels.count
+        return viewModel.outputs?.listCellViewModels.count ?? 0
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         
         guard let cell = tableView.dequeueReusableCell(withIdentifier: "ListCell", for: indexPath) as? ListCell else { return UITableViewCell() }
         
-        let listCellViewModel = viewModel.listCellViewModels[indexPath.row]
-        cell.setup(viewModel: listCellViewModel)
+        if let listCellViewModel = viewModel.outputs?.listCellViewModels[indexPath.row] {
+            cell.setup(viewModel: listCellViewModel)
+        }
         
         return cell
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        let listCellViewModel = viewModel.listCellViewModels[indexPath.row]
+        guard let listCellViewModel = viewModel.outputs?.listCellViewModels[indexPath.row] else { return }
         
         convienceAlert(alert: "Tapped: \(listCellViewModel.title)",
                 alertMessage: "music: \(listCellViewModel.description)",
@@ -74,4 +69,26 @@ extension ViewController: UITableViewDelegate, UITableViewDataSource {
                   completion: nil, actionCompletion: nil)
     }
     
+}
+
+// MARK: - ViewModel delegate
+extension ViewController: ViewModelDelegate {
+    func binding() -> ViewControllerViewModel.Events {
+        // prepare bind observable
+        let requestEnd = Observable<Void>().binding { [weak self] _ in
+            DispatchQueue.main.async {
+                self?.listTableView.reloadData()
+            }
+        }
+        
+        let requestFail = Observable<Error>().binding { [weak self] (error) in
+            DispatchQueue.main.async {
+                self?.convienceAlert(alert: "Search error", alertMessage: error?.localizedDescription, actions: ["確認"], completion: nil, actionCompletion: nil)
+            }
+        }
+        
+        return ViewControllerViewModel.Events(onSearchMusics: searchTextChanged,
+                                                onRequestEnd: requestEnd,
+                                               onRequestFail: requestFail)
+    }
 }

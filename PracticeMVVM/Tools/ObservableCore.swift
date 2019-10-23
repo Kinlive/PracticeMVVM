@@ -22,7 +22,9 @@ class Observable<T> {
     @discardableResult
     func binding(valueChanged: ValueChanged?) -> Self {
         self.valueChanged = valueChanged
-        onNext(value)
+        if let value = value {
+            onNext(value)
+        }
         return self
     }
     
@@ -32,11 +34,4 @@ class Observable<T> {
         valueChanged?(value)
     }
     
-    func bind(to observable: Observable<T>) {
-        self.value = observable.value
-        
-        observable.binding { [weak self] (value) in
-            self?.valueChanged?(value)
-        }
-    }
 }

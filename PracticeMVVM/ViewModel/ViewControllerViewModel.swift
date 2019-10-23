@@ -8,24 +8,51 @@
 
 import UIKit
 
+protocol ViewModelDelegate: class {
+    func binding() -> ViewControllerViewModel.Events
+}
+
+
 class ViewControllerViewModel {
+   
+    struct Events {
+        var onSearchMusics: Observable<String>
+        var onRequestEnd: Observable<Void>
+        var onRequestFail: Observable<Error>
+        // maybe have more events
+        // ...
+    }
+    
+    struct Outputs {
+       
+        var listCellViewModels: [ListCellViewModel]
+        
+        // maybe have more outputs
+        // ...
+    }
+    
+    public private(set) var events: Events?
+    public private(set) var outputs: Outputs?
+    
+    // delegate
+    weak var delegate: ViewModelDelegate?
     
     // service
     private let service = RequestCommunicator<DownloadMusic>()
     
     // models
     private var musicHandlers: [MusicHandler] = []
-    public private(set) var listCellViewModels: [ListCellViewModel] = []
     
-    // on event input
-    var searchText: String = "" {
-        didSet {
-            prepareRequest(with: searchText)
-        }
+    
+    init(delegate: ViewModelDelegate) {
+        self.delegate = delegate
+        events = delegate.binding()
+        outputs = Outputs(listCellViewModels: [])
+        
+        events?.onSearchMusics.binding(valueChanged: { [weak self] (value) in
+            self?.prepareRequest(with: value ?? "")
+        })
     }
-    
-    // on completion outputs
-    var onRequestEnd: (() -> Void)?
     
     // Methods
     private func prepareRequest(with name: String) {
@@ -37,7 +64,8 @@ class ViewControllerViewModel {
                 self?.convertMusicToViewModel(musics: musicHandelr)
                 
             case .failure(let error):
-                print("Network error: \(error.localizedDescription)")
+                self?.events?.onRequestFail.onNext(error)
+               
             }
         }
     }
@@ -47,9 +75,10 @@ class ViewControllerViewModel {
             let listCellViewModel = ListCellViewModel(title: music.collectionName,
                                                 description: music.name,
                                                    imageUrl: music.imageUrl)
-            listCellViewModels.append(listCellViewModel)
+            
+            outputs?.listCellViewModels.append(listCellViewModel)
         }
-        onRequestEnd?()
+        events?.onRequestEnd.onNext()
     }
     
 }
