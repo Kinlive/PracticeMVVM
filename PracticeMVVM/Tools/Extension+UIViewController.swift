@@ -27,3 +27,53 @@ extension UIViewController {
         }
     }
 }
+
+extension NSObject {
+    func setAssociated<T>(value: T, associatedKey: UnsafeRawPointer, policy: objc_AssociationPolicy = objc_AssociationPolicy.OBJC_ASSOCIATION_RETAIN_NONATOMIC) -> Void {
+        objc_setAssociatedObject(self, associatedKey, value, policy)
+    }
+    
+    func getAssociated<T>(associatedKey: UnsafeRawPointer) -> T? {
+        let value = objc_getAssociatedObject(self, associatedKey) as? T
+        return value;
+    }
+}
+
+extension UISearchBar {
+    
+    struct AssociatedKeys {
+        static var text = "BindText"
+    }
+    
+    var bindText: Observable<String>? {
+        if let observeText = objc_getAssociatedObject(self, &AssociatedKeys.text) as? Observable<String> {
+            
+            return observeText
+        } else {
+            let b = Observable<String>(self.text)
+            objc_setAssociatedObject(self, &AssociatedKeys.text, b, objc_AssociationPolicy.OBJC_ASSOCIATION_RETAIN_NONATOMIC)
+            return b
+        }
+    }
+    
+}
+
+
+extension UIView {
+    struct AssociatedKeys {
+        static var isHidden = "isHidden"
+        
+    }
+    
+    var bindIsHidden: Observable<Bool> {
+        if let oldValue = objc_getAssociatedObject(self, &AssociatedKeys.isHidden) as? Observable<Bool> {
+            return oldValue
+            
+        } else {
+            let newValue = Observable<Bool>(self.isHidden)
+            objc_setAssociatedObject(self, &AssociatedKeys.isHidden, newValue, objc_AssociationPolicy.OBJC_ASSOCIATION_RETAIN_NONATOMIC)
+            return newValue
+        }
+        
+    }
+}

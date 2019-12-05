@@ -38,7 +38,8 @@ class ViewController: UIViewController {
 
 extension ViewController: UISearchBarDelegate {
     func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
-        searchTextChanged.onNext(searchBar.text)
+        //searchTextChanged.onNext(searchBar.text)
+        self.searchBar.bindText?.onNext(searchBar.text)
         searchBar.endEditing(true)
     }
 }
@@ -87,7 +88,7 @@ extension ViewController: ViewModelDelegate {
             }
         }
         
-        return ViewControllerViewModel.Events(onSearchMusics: searchTextChanged,
+        return ViewControllerViewModel.Events(onSearchMusics: searchBar.bindText ?? Observable("bind fail"),//searchTextChanged,
                                                 onRequestEnd: requestEnd,
                                                onRequestFail: requestFail)
     }
